@@ -1,6 +1,13 @@
 import streamlit as st
 import json
 
+# Set page configuration for wide layout
+st.set_page_config(
+    page_title="JSON Richtext Validator",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 # Function to validate if a value is JSON stringified
 
 
@@ -25,8 +32,8 @@ def validate_richtext_keys(json_data):
             for key, value in data.items():
                 new_path = f"{path}.{key}" if path else key
                 if "richtext" in key.lower() and not is_json_stringified(value):
-                    errors.append(
-                        f"Invalid JSON stringified value at key: `{new_path}`")
+                    errors.append({"Key": new_path, "Value": value,
+                                  "Error": "Invalid JSON stringified value"})
                 if isinstance(value, (dict, list)):
                     recursive_check(value, new_path)
         elif isinstance(data, list):
@@ -38,12 +45,6 @@ def validate_richtext_keys(json_data):
     recursive_check(json_data)
     return errors
 
-
-st.set_page_config(
-    page_title="JSON Richtext Validator",  # Optional: Set the page title
-    layout="wide",  # Use the full width of the browser
-    initial_sidebar_state="expanded"  # Optional: Set the initial sidebar state
-)
 
 # Streamlit app
 st.title("JSON Richtext Validator")
@@ -58,15 +59,16 @@ if uploaded_file is not None:
         json_data = json.load(uploaded_file)
 
         # Validate the JSON
-        st.write("File uploaded")
+        st.write("### Uploaded JSON:")
+        st.json(json_data)
 
         errors = validate_richtext_keys(json_data)
 
         # Display validation results
         if errors:
             st.error("Validation Errors Found:")
-            for error in errors:
-                st.write(f"- {error}")
+            st.write("Below is a table of all validation errors:")
+            st.table(errors)  # Display errors as a table
         else:
             st.success(
                 "All 'richtext' keys have valid JSON stringified values!")
