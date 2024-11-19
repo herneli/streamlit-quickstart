@@ -26,7 +26,7 @@ def validate_richtext_keys(json_data):
                 new_path = f"{path}.{key}" if path else key
                 if "richtext" in key.lower() and not is_json_stringified(value):
                     errors.append(
-                        f"Invalid JSON stringified value at key: {new_path}")
+                        f"Invalid JSON stringified value at key: `{new_path}`")
                 if isinstance(value, (dict, list)):
                     recursive_check(value, new_path)
         elif isinstance(data, list):
@@ -38,6 +38,12 @@ def validate_richtext_keys(json_data):
     recursive_check(json_data)
     return errors
 
+
+st.set_page_config(
+    page_title="JSON Richtext Validator",  # Optional: Set the page title
+    layout="wide",  # Use the full width of the browser
+    initial_sidebar_state="expanded"  # Optional: Set the initial sidebar state
+)
 
 # Streamlit app
 st.title("JSON Richtext Validator")
@@ -52,8 +58,7 @@ if uploaded_file is not None:
         json_data = json.load(uploaded_file)
 
         # Validate the JSON
-        st.write("### Uploaded JSON:")
-        st.json(json_data)
+        st.write("File uploaded")
 
         errors = validate_richtext_keys(json_data)
 
