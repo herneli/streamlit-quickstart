@@ -57,11 +57,8 @@ if uploaded_file is not None:
     try:
         # Read and parse the uploaded JSON file
         json_data = json.load(uploaded_file)
-
+        st.info("Validating JSON file...")
         # Validate the JSON
-        st.write("### Uploaded JSON:")
-        st.json(json_data)
-
         errors = validate_richtext_keys(json_data)
 
         # Display validation results
