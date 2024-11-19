@@ -32,7 +32,7 @@ def validate_richtext_keys(json_data):
             for key, value in data.items():
                 new_path = f"{path}.{key}" if path else key
                 if "richtext" in key.lower() and not is_json_stringified(value):
-                    errors.append({"Key": new_path, "Value": value,
+                    errors.append({"Key": new_path,
                                   "Error": "Invalid JSON stringified value"})
                 if isinstance(value, (dict, list)):
                     recursive_check(value, new_path)
