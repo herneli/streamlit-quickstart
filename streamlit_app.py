@@ -65,7 +65,9 @@ if uploaded_file is not None:
         if errors:
             st.error("Validation Errors Found:")
             st.write("Below is a table of all validation errors:")
-            st.table(errors)  # Display errors as a table
+            st.dataframe(errors,
+                         use_container_width=True
+                         )  # Display errors as a table
         else:
             st.success(
                 "All 'richtext' keys have valid JSON stringified values!")
